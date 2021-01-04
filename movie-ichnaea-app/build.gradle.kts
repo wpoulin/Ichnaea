@@ -12,5 +12,8 @@ application {
 }
 
 dependencies {
+    implementation(project(":movie-ichnaea-core"))
+    implementation(project(":movie-ichnaea-data"))
+    implementation(project(":movie-ichnaea-models"))
     implementation(project(":movie-ichnaea-rest"))
 }

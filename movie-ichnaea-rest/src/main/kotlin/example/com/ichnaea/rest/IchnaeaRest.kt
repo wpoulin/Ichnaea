@@ -1,12 +1,15 @@
 package example.com.ichnaea.rest
 
+import example.com.ichnaea.core.services.MovieService
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
 import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-class IchnaeaRest() : Runnable {
+class IchnaeaRest(
+        private val movieService: MovieService
+) : Runnable {
 
     override fun run() {
         app.start(3000)
@@ -47,7 +50,7 @@ class IchnaeaRest() : Runnable {
 
                         // URL: /rest/v1/movies/{:id}
                         get(":id") {
-                            it.json("v1/movies/:id")
+                            it.json(movieService.fetch(it.pathParam("id").toInt()))
                         }
                     }
                 }
