@@ -14,5 +14,4 @@ class IchnaeaDal(private val db: Database) {
                     ?.toMovie()
         }
     }
-
 }
