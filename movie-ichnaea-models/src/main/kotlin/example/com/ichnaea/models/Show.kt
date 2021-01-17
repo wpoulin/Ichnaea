@@ -7,5 +7,7 @@ data class Show(
     val releaseYear: Int,
     val runtime: Int,
 
+    val showType: ShowType,
+
     val genres: List<Genre>
 )

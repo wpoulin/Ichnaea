@@ -9,6 +9,8 @@ object ShowTable : Table() {
     val description = text("description")
     val releaseYear = integer("year")
     val runtime = integer("runtime")
+
+    val showType = varchar("showType", 7)
 }
 
 object GenreTable : Table() {

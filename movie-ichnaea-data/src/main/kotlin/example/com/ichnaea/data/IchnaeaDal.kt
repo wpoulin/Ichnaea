@@ -2,6 +2,7 @@ package example.com.ichnaea.data
 
 import example.com.ichnaea.models.Genre
 import example.com.ichnaea.models.Show
+import example.com.ichnaea.models.ShowType
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -63,13 +64,14 @@ class IchnaeaDal(private val db: Database) {
         return fetchGenre(id)
     }
 
-    fun createShow(title: String, description: String, releaseYear: Int, runtime: Int): Show? {
+    fun createShow(title: String, description: String, releaseYear: Int, runtime: Int, showType: ShowType): Show? {
         val id = transaction(db) {
             ShowTable.insert {
                 it[this.title] = title
                 it[this.description] = description
                 it[this.releaseYear] = releaseYear
                 it[this.runtime] = runtime
+                it[this.showType] = showType.toString()
             } get ShowTable.id
         }
         return fetchShow(id)
