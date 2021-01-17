@@ -2,12 +2,9 @@
 
 package example.com.ichnaea.app
 
-import example.com.ichnaea.core.services.MovieService
-import example.com.ichnaea.data.GenreTable
+import example.com.ichnaea.core.services.ShowService
+import example.com.ichnaea.data.*
 import example.com.ichnaea.rest.IchnaeaRest
-import example.com.ichnaea.data.IchnaeaDal
-import example.com.ichnaea.data.MovieGenreTable
-import example.com.ichnaea.data.MovieTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
@@ -19,7 +16,7 @@ import java.sql.Connection
 
 fun main() {
 
-    val tables = arrayOf(MovieTable, GenreTable, MovieGenreTable)
+    val tables = arrayOf(ShowTable, GenreTable, ShowGenreTable)
 
     // Connect to the database and create the needed tables. Drop any existing data.
     val db = Database
@@ -32,7 +29,7 @@ fun main() {
                 transaction(it) {
                     addLogger(StdOutSqlLogger)
                     // Drop all existing tables to ensure a clean slate on each run
-                    //SchemaUtils.drop(*tables)
+                    SchemaUtils.drop(*tables)
                     // Create all tables
                     SchemaUtils.create(*tables)
                 }
@@ -45,8 +42,8 @@ fun main() {
     setupInitialData(dal = dal)
 
     // Create core service
-    val movieService = MovieService(dal = dal)
+    val showService = ShowService(dal = dal)
 
     // Create REST web service
-    IchnaeaRest(movieService = movieService).run()
+    IchnaeaRest(showService = showService).run()
 }

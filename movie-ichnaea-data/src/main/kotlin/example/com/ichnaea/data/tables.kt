@@ -3,7 +3,7 @@ package example.com.ichnaea.data
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 
-object MovieTable : Table() {
+object ShowTable : Table() {
     val id = integer("id").autoIncrement().primaryKey()
     val title = text("title")
     val description = text("description")
@@ -16,7 +16,7 @@ object GenreTable : Table() {
     val title = text("title")
 }
 
-object MovieGenreTable : Table() {
-    val movie = reference("movie_id", MovieTable.id, ReferenceOption.CASCADE).primaryKey()
+object ShowGenreTable : Table() {
+    val show = reference("show_id", ShowTable.id, ReferenceOption.CASCADE).primaryKey()
     val genre = reference("genre_id", GenreTable.id, ReferenceOption.CASCADE).primaryKey()
 }

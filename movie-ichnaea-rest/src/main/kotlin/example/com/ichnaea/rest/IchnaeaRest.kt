@@ -1,6 +1,6 @@
 package example.com.ichnaea.rest
 
-import example.com.ichnaea.core.services.MovieService
+import example.com.ichnaea.core.services.ShowService
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
 import mu.KotlinLogging
@@ -8,14 +8,13 @@ import mu.KotlinLogging
 private val logger = KotlinLogging.logger {}
 
 class IchnaeaRest(
-        private val movieService: MovieService
+        private val showService: ShowService
 ) : Runnable {
 
     override fun run() {
         app.start(3000)
     }
 
-    // Set up Javalin rest app
     private val app = Javalin
         .create()
         .apply {
@@ -42,15 +41,20 @@ class IchnaeaRest(
 
                 // V1
                 path("v1") {
-                    path("movies") {
-                        // URL: /rest/v1/movies
+                    path("shows") {
+                        // URL: /rest/v1/shows
                         get {
-                            it.json("v1/movies")
+                            it.json(showService.fetchAll())
                         }
 
-                        // URL: /rest/v1/movies/{:id}
+                        // Testing purpose
+                        get("test") {
+                            it.json(showService.fetchAddInfos(1))
+                        }
+
+                        // URL: /rest/v1/shows/{:id}
                         get(":id") {
-                            it.json(movieService.fetch(it.pathParam("id").toInt()))
+                            it.json(showService.fetch(it.pathParam("id").toInt()))
                         }
                     }
                 }
