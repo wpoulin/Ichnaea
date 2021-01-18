@@ -10,7 +10,7 @@ object ShowTable : Table() {
     val releaseYear = integer("year")
     val runtime = integer("runtime")
 
-    val showType = varchar("showType", 7)
+    val typeId = reference("type_id", TypeTable.id)
 }
 
 object GenreTable : Table() {
@@ -21,4 +21,9 @@ object GenreTable : Table() {
 object ShowGenreTable : Table() {
     val show = reference("show_id", ShowTable.id, ReferenceOption.CASCADE).primaryKey()
     val genre = reference("genre_id", GenreTable.id, ReferenceOption.CASCADE).primaryKey()
+}
+
+object TypeTable: Table() {
+    val id = integer("id").autoIncrement().primaryKey()
+    val type = text("title")
 }

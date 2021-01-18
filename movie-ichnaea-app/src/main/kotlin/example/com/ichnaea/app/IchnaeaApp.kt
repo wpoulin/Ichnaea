@@ -16,7 +16,7 @@ import java.sql.Connection
 
 fun main() {
 
-    val tables = arrayOf(ShowTable, GenreTable, ShowGenreTable)
+    val tables = arrayOf(ShowTable, GenreTable, ShowGenreTable, TypeTable)
 
     // Connect to the database and create the needed tables. Drop any existing data.
     val db = Database

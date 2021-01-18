@@ -2,7 +2,7 @@ package example.com.ichnaea.data
 
 import example.com.ichnaea.models.Genre
 import example.com.ichnaea.models.Show
-import example.com.ichnaea.models.ShowType
+import example.com.ichnaea.models.Type
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -10,39 +10,23 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class IchnaeaDal(private val db: Database) {
+    // Basic fetch
     fun fetchShow(id: Int): Show? {
         return transaction(db) {
-            ShowTable.select {ShowTable.id.eq(id) }
-                    .firstOrNull()
-                    ?.toShow(emptyList())
-        }
-    }
-
-    fun fetchShowAddInfos(id: Int): Show? {
-        return transaction(db) {
-            val genre = GenreTable.innerJoin(ShowGenreTable)
-                    .innerJoin(ShowTable)
-                    .slice(GenreTable.columns)
-                    .select { ShowTable.id.eq(id) }
-                    .mapNotNull { it.toGenre() }
             ShowTable
-                    .innerJoin(ShowGenreTable)
-                    .innerJoin(GenreTable)
-                    .select { ShowTable.id.eq(id) }
+                    .select {ShowTable.id.eq(id) }
                     .firstOrNull()
-                    ?.toShow(genre)
+                    ?.toShow()
         }
     }
 
     fun fetchShows(): List<Show> {
         return transaction(db) {
-            GenreTable.innerJoin(ShowGenreTable)
+            GenreTable
+                    .innerJoin(ShowGenreTable)
                     .innerJoin(ShowTable)
                     .selectAll()
-                    .groupBy({ it.toShow(emptyList()) }) { it.toGenre() }
-                    .entries.map { (show, genres) ->
-                        show.copy(genres = genres)
-                    }
+                    .mapNotNull { it.toShow() }
         }
     }
 
@@ -55,6 +39,46 @@ class IchnaeaDal(private val db: Database) {
         }
     }
 
+    fun fetchType(id: Int): Type? {
+        return transaction(db) {
+            TypeTable
+                    .select { TypeTable.id.eq(id) }
+                    .firstOrNull()
+                    ?.toType()
+        }
+    }
+
+
+
+
+    // Fetch Additional info for a show
+    fun fetchGenreShow(id: Int): List<Genre> {
+        return transaction(db) {
+            GenreTable
+                    .innerJoin(ShowGenreTable)
+                    .innerJoin(ShowTable)
+                    .slice(GenreTable.columns)
+                    .select { ShowTable.id.eq(id) }
+                    .mapNotNull { it.toGenre() }
+        }
+    }
+
+
+
+    // Create entities
+    fun createShow(title: String, description: String, releaseYear: Int, runtime: Int, showType: Type): Show? {
+        val id = transaction(db) {
+            ShowTable.insert {
+                it[this.title] = title
+                it[this.description] = description
+                it[this.releaseYear] = releaseYear
+                it[this.runtime] = runtime
+                it[this.typeId] = showType.id
+            } get ShowTable.id
+        }
+        return fetchShow(id)
+    }
+
     fun createGenre(title: String): Genre? {
         val id = transaction(db) {
             GenreTable.insert {
@@ -64,20 +88,19 @@ class IchnaeaDal(private val db: Database) {
         return fetchGenre(id)
     }
 
-    fun createShow(title: String, description: String, releaseYear: Int, runtime: Int, showType: ShowType): Show? {
+    fun createType(type: String): Type? {
         val id = transaction(db) {
-            ShowTable.insert {
-                it[this.title] = title
-                it[this.description] = description
-                it[this.releaseYear] = releaseYear
-                it[this.runtime] = runtime
-                it[this.showType] = showType.toString()
-            } get ShowTable.id
+            TypeTable.insert {
+                it[this.type] = type
+            } get TypeTable.id
         }
-        return fetchShow(id)
+        return fetchType(id)
     }
 
-    fun addGenreToShow(show: Show, genre: Genre) {
+
+
+    // Add Additional info to a show
+    fun addGenre(show: Show, genre: Genre) {
         transaction(db) {
             ShowGenreTable.insert {
                 it[this.show] = show.id
@@ -85,4 +108,5 @@ class IchnaeaDal(private val db: Database) {
             }
         }
     }
+
 }

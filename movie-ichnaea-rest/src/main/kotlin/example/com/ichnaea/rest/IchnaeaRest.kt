@@ -1,6 +1,8 @@
 package example.com.ichnaea.rest
 
 import example.com.ichnaea.core.services.ShowService
+import example.com.ichnaea.models.Genre
+import example.com.ichnaea.models.ShowRating
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
 import mu.KotlinLogging
@@ -47,9 +49,8 @@ class IchnaeaRest(
                             it.json(showService.fetchAll())
                         }
 
-                        // Testing purpose
-                        get("test") {
-                            it.json(showService.fetchAddInfos(1))
+                        post {
+                            showService.addViewedShow(it.body<ShowRating>())
                         }
 
                         // URL: /rest/v1/shows/{:id}
