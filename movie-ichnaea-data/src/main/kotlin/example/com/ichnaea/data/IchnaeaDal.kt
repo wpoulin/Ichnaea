@@ -3,6 +3,7 @@ package example.com.ichnaea.data
 import example.com.ichnaea.models.Genre
 import example.com.ichnaea.models.Show
 import example.com.ichnaea.models.Type
+import example.com.ichnaea.models.User
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -48,6 +49,15 @@ class IchnaeaDal(private val db: Database) {
         }
     }
 
+    fun fetchUser(id: Int): User? {
+        return transaction(db) {
+            UserTable
+                    .select { UserTable.id.eq(id) }
+                    .firstOrNull()
+                    ?.toUser()
+        }
+    }
+
 
 
 
@@ -60,6 +70,17 @@ class IchnaeaDal(private val db: Database) {
                     .slice(GenreTable.columns)
                     .select { ShowTable.id.eq(id) }
                     .mapNotNull { it.toGenre() }
+        }
+    }
+
+    fun fetchShowUser(id: Int): List<Show> {
+        return transaction(db) {
+            ShowTable
+                    .innerJoin(ShowUserTable)
+                    .innerJoin(UserTable)
+                    .slice(ShowTable.columns)
+                    .select { UserTable.id.eq(id) }
+                    .mapNotNull { it.toShow() }
         }
     }
 
@@ -97,6 +118,16 @@ class IchnaeaDal(private val db: Database) {
         return fetchType(id)
     }
 
+    fun createUser(firstName: String, lastName: String): User? {
+        val id = transaction(db) {
+            UserTable.insert {
+                it[this.firstName] = firstName
+                it[this.lastName] = lastName
+            } get UserTable.id
+        }
+        return fetchUser(id)
+    }
+
 
 
     // Add Additional info to a show
@@ -105,6 +136,15 @@ class IchnaeaDal(private val db: Database) {
             ShowGenreTable.insert {
                 it[this.show] = show.id
                 it[this.genre] = genre.id
+            }
+        }
+    }
+
+    fun addShow(user: User, show: Show) {
+        transaction(db) {
+            ShowUserTable.insert {
+                it[this.show] = show.id
+                it[this.user] = user.id
             }
         }
     }
