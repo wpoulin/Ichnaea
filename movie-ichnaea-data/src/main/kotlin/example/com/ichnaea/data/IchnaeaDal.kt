@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
 
 class IchnaeaDal(private val db: Database) {
     // Basic fetch
@@ -140,11 +141,13 @@ class IchnaeaDal(private val db: Database) {
         }
     }
 
-    fun addShow(user: User, show: Show) {
+    fun addShow(user: User, show: Show, rating: Double, timestamp: DateTime) {
         transaction(db) {
             ShowUserTable.insert {
                 it[this.show] = show.id
                 it[this.user] = user.id
+                it[this.rating] = rating
+                it[this.timestamp] = timestamp
             }
         }
     }

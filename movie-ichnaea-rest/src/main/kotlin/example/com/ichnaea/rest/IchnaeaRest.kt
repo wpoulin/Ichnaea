@@ -1,7 +1,6 @@
 package example.com.ichnaea.rest
 
 import example.com.ichnaea.core.services.ShowService
-import example.com.ichnaea.models.Genre
 import example.com.ichnaea.models.ShowRating
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
@@ -50,7 +49,7 @@ class IchnaeaRest(
                         }
 
                         post {
-                            showService.createViewedShow(it.body<ShowRating>())
+                            showService.createShowRating(it.body<ShowRating>())
                         }
 
                         // URL: /rest/v1/shows/{:id}

@@ -37,4 +37,6 @@ object UserTable: Table() {
 object ShowUserTable: Table() {
     val show = reference("show_id", ShowTable.id, ReferenceOption.CASCADE).primaryKey()
     val user = reference("user_id", UserTable.id, ReferenceOption.CASCADE).primaryKey()
+    val rating = double("rating")
+    val timestamp = datetime("timestamp")
 }

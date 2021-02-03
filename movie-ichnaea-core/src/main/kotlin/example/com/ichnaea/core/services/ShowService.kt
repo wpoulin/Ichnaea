@@ -23,7 +23,7 @@ class ShowService(private val dal: IchnaeaDal) {
         return dal.fetchShowUser(id)
     }
 
-    fun createViewedShow(showRating: ShowRating) {
+    fun createShowRating(showRating: ShowRating) {
         println(showRating.title)
         println(showRating.rating)
     }

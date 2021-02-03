@@ -1,6 +1,7 @@
 package example.com.ichnaea.app
 
 import example.com.ichnaea.data.IchnaeaDal
+import org.joda.time.DateTime
 
 fun setupInitialData(dal: IchnaeaDal) {
     val war = dal.createGenre("War")
@@ -39,9 +40,10 @@ fun setupInitialData(dal: IchnaeaDal) {
                 dal.addGenre(bourneSupremacy, thriller)
 
                 if (user1 != null && user2 != null) {
-                    dal.addShow(user1, hacksawRidge)
-                    dal.addShow(user1, bourneSupremacy)
-                    dal.addShow(user2, hacksawRidge)
+                    val datetimeNow = DateTime()
+                    dal.addShow(user1, hacksawRidge, 3.7, datetimeNow)
+                    dal.addShow(user1, bourneSupremacy, 4.2, datetimeNow)
+                    dal.addShow(user2, hacksawRidge, 3.4, datetimeNow)
                 }
             }
         }
