@@ -27,3 +27,16 @@ object TypeTable: Table() {
     val id = integer("id").autoIncrement().primaryKey()
     val type = text("title")
 }
+
+object UserTable: Table() {
+    val id = integer("id").autoIncrement().primaryKey()
+    val firstName = text("firstName")
+    val lastName = text("lastName")
+}
+
+object ShowUserTable: Table() {
+    val show = reference("show_id", ShowTable.id, ReferenceOption.CASCADE).primaryKey()
+    val user = reference("user_id", UserTable.id, ReferenceOption.CASCADE).primaryKey()
+    val rating = double("rating")
+    val timestamp = datetime("timestamp")
+}

@@ -19,7 +19,11 @@ class ShowService(private val dal: IchnaeaDal) {
         return dal.fetchShows()
     }
 
-    fun addViewedShow(showRating: ShowRating) {
+    fun fetchShowUser(id: Int): List<Show> {
+        return dal.fetchShowUser(id)
+    }
+
+    fun createShowRating(showRating: ShowRating) {
         println(showRating.title)
         println(showRating.rating)
     }

@@ -16,12 +16,12 @@ import java.sql.Connection
 
 fun main() {
 
-    val tables = arrayOf(ShowTable, GenreTable, ShowGenreTable, TypeTable)
+    val tables = arrayOf(ShowTable, GenreTable, ShowGenreTable, TypeTable, UserTable, ShowUserTable)
 
     // Connect to the database and create the needed tables. Drop any existing data.
     val db = Database
             .connect(url = "jdbc:mysql://localhost:3306/ichnaea",
-                    driver = "com.mysql.jdbc.Driver",
+                    driver = "com.mysql.cj.jdbc.Driver",
                     user = "root",
                     password = "root")
             .also {
