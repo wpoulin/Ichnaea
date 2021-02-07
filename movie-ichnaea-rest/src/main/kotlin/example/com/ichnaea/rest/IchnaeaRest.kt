@@ -48,9 +48,6 @@ class IchnaeaRest(
                             it.json(showService.fetchAll())
                         }
 
-                        post {
-                            showService.createShowRating(it.body<ShowRating>())
-                        }
 
                         // URL: /rest/v1/shows/{:id}
                         get(":id") {
@@ -61,6 +58,10 @@ class IchnaeaRest(
                         // URL: /rest/v1/user/{:id}/shows
                         get(":id/shows") {
                             it.json(showService.fetchShowUser(it.pathParam("id").toInt()))
+                        }
+
+                        post(":id/shows") {
+                            showService.createShowRating(it.body<ShowRating>())
                         }
                     }
                 }
