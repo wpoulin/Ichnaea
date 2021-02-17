@@ -59,11 +59,26 @@ class IchnaeaDal(private val db: Database) {
         }
     }
 
+    fun fetchTypeByName(name: String): Type? {
+        return transaction(db) {
+            TypeTable
+                    .select { TypeTable.type.eq(name) }
+                    .firstOrNull()
+                    ?.toType()
+        }
+    }
 
-
+    fun fetchGenreByName(name: String): Genre? {
+        return transaction(db) {
+            GenreTable
+                    .select { GenreTable.title.eq(name) }
+                    .firstOrNull()
+                    ?.toGenre()
+        }
+    }
 
     // Fetch Additional info for a show
-    fun fetchGenreShow(id: Int): List<Genre> {
+    fun fetchGenreOfShow(id: Int): List<Genre> {
         return transaction(db) {
             GenreTable
                     .innerJoin(ShowGenreTable)
@@ -74,7 +89,7 @@ class IchnaeaDal(private val db: Database) {
         }
     }
 
-    fun fetchShowUser(id: Int): List<Show> {
+    fun fetchShowOfUser(id: Int): List<Show> {
         return transaction(db) {
             ShowTable
                     .innerJoin(ShowUserTable)
@@ -141,11 +156,11 @@ class IchnaeaDal(private val db: Database) {
         }
     }
 
-    fun addShow(user: User, show: Show, rating: Double, timestamp: DateTime) {
+    fun addShowRating(userId: Int, showId: Int, rating: Double, timestamp: DateTime) {
         transaction(db) {
             ShowUserTable.insert {
-                it[this.show] = show.id
-                it[this.user] = user.id
+                it[this.show] = showId
+                it[this.user] = userId
                 it[this.rating] = rating
                 it[this.timestamp] = timestamp
             }

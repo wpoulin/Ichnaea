@@ -1,7 +1,7 @@
 package example.com.ichnaea.rest
 
 import example.com.ichnaea.core.services.ShowService
-import example.com.ichnaea.models.ShowRating
+import example.com.ichnaea.models.UserRating
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
 import mu.KotlinLogging
@@ -47,8 +47,6 @@ class IchnaeaRest(
                         get {
                             it.json(showService.fetchAll())
                         }
-
-
                         // URL: /rest/v1/shows/{:id}
                         get(":id") {
                             it.json(showService.fetch(it.pathParam("id").toInt()))
@@ -61,7 +59,7 @@ class IchnaeaRest(
                         }
 
                         post(":id/shows") {
-                            showService.createShowRating(it.body<ShowRating>())
+                            showService.addUserRating(it.body<UserRating>())
                         }
                     }
                 }

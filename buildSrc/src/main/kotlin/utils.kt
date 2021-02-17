@@ -27,6 +27,12 @@ fun Project.kotlinProject() {
 
         // Database connection
         "implementation"("mysql:mysql-connector-java:8.0.22")
+
+        // Json serialization
+        "implementation"("com.google.code.gson:gson:2.8.6")
+
+        // joda datetime
+        "implementation"("joda-time:joda-time:2.10.10")
     }
 }
 

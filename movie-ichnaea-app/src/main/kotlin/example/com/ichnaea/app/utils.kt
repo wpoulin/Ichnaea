@@ -41,9 +41,9 @@ fun setupInitialData(dal: IchnaeaDal) {
 
                 if (user1 != null && user2 != null) {
                     val datetimeNow = DateTime()
-                    dal.addShow(user1, hacksawRidge, 3.7, datetimeNow)
-                    dal.addShow(user1, bourneSupremacy, 4.2, datetimeNow)
-                    dal.addShow(user2, hacksawRidge, 3.4, datetimeNow)
+                    dal.addShowRating(user1.id, hacksawRidge.id, 3.7, datetimeNow)
+                    dal.addShowRating(user1.id, bourneSupremacy.id, 4.2, datetimeNow)
+                    dal.addShowRating(user2.id, hacksawRidge.id, 3.4, datetimeNow)
                 }
             }
         }
