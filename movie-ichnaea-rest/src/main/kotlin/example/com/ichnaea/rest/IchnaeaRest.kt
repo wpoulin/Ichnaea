@@ -49,7 +49,7 @@ class IchnaeaRest(
                         }
                         // URL: /rest/v1/shows/{:id}
                         get(":id") {
-                            it.json(showService.fetch(it.pathParam("id").toInt()))
+                            it.json(showService.fetchShow(it.pathParam("id").toInt()))
                         }
                     }
                     path("user") {

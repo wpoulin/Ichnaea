@@ -15,7 +15,7 @@ import java.net.http.HttpResponse
 class ShowService(private val dal: IchnaeaDal) {
     private val apiKey = ""
 
-    fun fetch(id: Int): Show {
+    fun fetchShow(id: Int): Show {
         return dal.fetchShow(id) ?: throw ShowNotFoundException(id)
     }
 
