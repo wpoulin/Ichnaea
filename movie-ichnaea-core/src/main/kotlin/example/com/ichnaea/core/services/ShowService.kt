@@ -23,7 +23,7 @@ class ShowService(private val dal: IchnaeaDal) {
         return dal.fetchGenreOfShow(id)
     }
 
-    fun fetchShowUser(id: Int): List<Show> {
+    fun fetchShowOfUser(id: Int): List<Show> {
         return dal.fetchShowOfUser(id)
     }
 

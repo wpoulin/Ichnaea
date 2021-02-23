@@ -55,7 +55,7 @@ class IchnaeaRest(
                     path("user") {
                         // URL: /rest/v1/user/{:id}/shows
                         get(":id/shows") {
-                            it.json(showService.fetchShowUser(it.pathParam("id").toInt()))
+                            it.json(showService.fetchShowOfUser(it.pathParam("id").toInt()))
                         }
 
                         post(":id/shows") {

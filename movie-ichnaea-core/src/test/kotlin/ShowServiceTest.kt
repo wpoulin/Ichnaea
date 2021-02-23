@@ -2,6 +2,7 @@ package example.com.ichnaea.core.services
 
 import example.com.ichnaea.core.exceptions.ShowNotFoundException
 import example.com.ichnaea.data.IchnaeaDal
+import example.com.ichnaea.models.Genre
 import example.com.ichnaea.models.Show
 import example.com.ichnaea.models.Type
 import io.mockk.every
@@ -85,5 +86,25 @@ class ShowServiceTest {
         // ASSERT
         verify { showService.createShow(show.title, show.description, show.releaseYear, show.runtime, showTypes) }
         assertEquals(show, result)
+    }
+
+    @Test
+    fun `will return genre of a show corresponding to an id`() {
+        // ARRANGE
+        val genres = mutableListOf(
+                Genre(1, "Action"),
+                Genre(2, "Guerre")
+        )
+        val dal = mockk<IchnaeaDal> {
+            every { fetchGenreOfShow(1) } returns genres
+        }
+        val showService = ShowService(dal = dal)
+
+        // ACT
+        val result = showService.fetchGenreOfShow(1)
+
+        // ASSERT
+        verify { showService.fetchGenreOfShow(1) }
+        assertEquals(genres, result)
     }
 }
