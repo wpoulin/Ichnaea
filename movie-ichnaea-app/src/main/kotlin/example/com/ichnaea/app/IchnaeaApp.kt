@@ -3,6 +3,7 @@
 package example.com.ichnaea.app
 
 import example.com.ichnaea.core.services.ShowService
+import example.com.ichnaea.core.services.UserService
 import example.com.ichnaea.data.*
 import example.com.ichnaea.rest.IchnaeaRest
 import org.jetbrains.exposed.sql.Database
@@ -43,7 +44,8 @@ fun main() {
 
     // Create core service
     val showService = ShowService(dal = dal)
+    val userService = UserService(dal = dal)
 
     // Create REST web service
-    IchnaeaRest(showService = showService).run()
+    IchnaeaRest(showService = showService, userService = userService).run()
 }

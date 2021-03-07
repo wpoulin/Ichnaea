@@ -1,9 +1,7 @@
 package example.com.ichnaea.core.services
 
 import com.google.gson.Gson
-import example.com.ichnaea.core.exceptions.GenreNotFoundException
-import example.com.ichnaea.core.exceptions.ShowNotFoundException
-import example.com.ichnaea.core.exceptions.TypeNotFoundException
+import example.com.ichnaea.core.exceptions.*
 import example.com.ichnaea.data.IchnaeaDal
 import example.com.ichnaea.models.*
 import org.joda.time.DateTime
@@ -23,10 +21,6 @@ class ShowService(private val dal: IchnaeaDal) {
         return dal.fetchGenreOfShow(id)
     }
 
-    fun fetchShowOfUser(id: Int): List<Show> {
-        return dal.fetchShowOfUser(id)
-    }
-
     fun fetchAll() : List<Show>{
         return dal.fetchShows()
     }
@@ -35,18 +29,16 @@ class ShowService(private val dal: IchnaeaDal) {
         return dal.fetchType(id) ?: throw TypeNotFoundException(id)
     }
 
-    // Todo make an exception type with name instead of id
     fun fetchTypeByName(name: String): Type {
-        return dal.fetchTypeByName(name) ?: throw TypeNotFoundException(0)
+        return dal.fetchTypeByName(name) ?: throw TypeWithNameNotFoundException(name)
     }
 
     fun fetchGenre(id: Int): Genre {
         return dal.fetchGenre(id) ?: throw GenreNotFoundException(id)
     }
 
-    // Todo make an exception type with name instead of id
-    fun fetchGenreByName(name: String): Genre? {
-        return dal.fetchGenreByName(name)
+    fun fetchGenreByName(name: String): Genre {
+        return dal.fetchGenreByName(name) ?: throw GenreWithNameNotFoundException(name)
     }
 
     fun addGenreToShow(show: Show, genre: Genre) {

@@ -1,6 +1,8 @@
 package example.com.ichnaea.core.services
 
+import example.com.ichnaea.core.exceptions.GenreNotFoundException
 import example.com.ichnaea.core.exceptions.ShowNotFoundException
+import example.com.ichnaea.core.exceptions.TypeNotFoundException
 import example.com.ichnaea.data.IchnaeaDal
 import example.com.ichnaea.models.Genre
 import example.com.ichnaea.models.Show
@@ -109,29 +111,6 @@ class ShowServiceTest {
     }
 
     @Test
-    fun `will return show of a user corresponding to an id`() {
-        // ARRANGE
-        val showTypes = Type(1, "Action")
-        val shows = mutableListOf(
-                Show(1,"Jason Bourne", "Description",2019,120, showTypes.id),
-                Show(2,"The Bourne Supremacy", "Supremacy",2004,108, showTypes.id),
-                Show(3,"Hacksaw Ridge", "Medic on the field",2016,139, showTypes.id),
-        )
-        val dal = mockk<IchnaeaDal> {
-            every { fetchShowOfUser(1) } returns shows
-        }
-        val showService = ShowService(dal = dal)
-
-        // ACT
-        val result = showService.fetchShowOfUser(1)
-
-        // ASSERT
-        verify { showService.fetchShowOfUser(1) }
-        assertEquals(shows, result)
-    }
-
-    // Todo implement test in case it throws an exception
-    @Test
     fun `will return type corresponding to an id`() {
         // ARRANGE
         val showTypes = Type(1, "show")
@@ -148,7 +127,36 @@ class ShowServiceTest {
         assertEquals(showTypes, result)
     }
 
-    // Todo implement test in case it throws an exception
+    @Test
+    fun `will return type corresponding to a name`() {
+        // ARRANGE
+        val showTypes = Type(1, "show")
+        val dal = mockk<IchnaeaDal> {
+            every { fetchTypeByName(showTypes.type) } returns showTypes
+        }
+        val showService = ShowService(dal = dal)
+
+        // ACT
+        val result = showService.fetchTypeByName(showTypes.type)
+
+        // ASSERT
+        verify { showService.fetchTypeByName(showTypes.type) }
+        assertEquals(showTypes, result)
+    }
+
+    @Test
+    fun `will throw if type is not found`() {
+        // ARRANGE
+        val dal = mockk<IchnaeaDal> {
+            every { fetchType(404) } returns null
+        }
+        val showService = ShowService(dal = dal)
+
+        assertThrows<TypeNotFoundException> {
+            showService.fetchType(404)
+        }
+    }
+
     @Test
     fun `will return genre corresponding to an id`() {
         // ARRANGE
@@ -164,5 +172,18 @@ class ShowServiceTest {
         // ASSERT
         verify { showService.fetchGenre(1) }
         assertEquals(genres, result)
+    }
+
+    @Test
+    fun `will throw if genre is not found`() {
+        // ARRANGE
+        val dal = mockk<IchnaeaDal> {
+            every { fetchGenre(404) } returns null
+        }
+        val showService = ShowService(dal = dal)
+
+        assertThrows<GenreNotFoundException> {
+            showService.fetchGenre(404)
+        }
     }
 }

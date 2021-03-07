@@ -1,6 +1,7 @@
 package example.com.ichnaea.rest
 
 import example.com.ichnaea.core.services.ShowService
+import example.com.ichnaea.core.services.UserService
 import example.com.ichnaea.models.UserRating
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
@@ -9,7 +10,8 @@ import mu.KotlinLogging
 private val logger = KotlinLogging.logger {}
 
 class IchnaeaRest(
-        private val showService: ShowService
+        private val showService: ShowService,
+        private val userService: UserService
 ) : Runnable {
 
     override fun run() {
@@ -55,7 +57,7 @@ class IchnaeaRest(
                     path("user") {
                         // URL: /rest/v1/user/{:id}/shows
                         get(":id/shows") {
-                            it.json(showService.fetchShowOfUser(it.pathParam("id").toInt()))
+                            it.json(userService.fetchShowOfUser(it.pathParam("id").toInt()))
                         }
 
                         post(":id/shows") {
